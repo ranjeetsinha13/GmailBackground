@@ -28,6 +28,7 @@ public class BackgroundMail {
     private String subject;
     private String body;
     private String type;
+    private String senderName;
     private String sendingMessage;
     private String sendingMessageSuccess;
     private String sendingMessageError;
@@ -56,7 +57,7 @@ public class BackgroundMail {
         this.mContext = context;
         this.sendingMessage = context.getString(R.string.msg_sending_email);
         this.sendingMessageSuccess = context.getString(R.string.msg_email_sent_successfully);
-        this.sendingMessageError=context.getString(R.string.msg_error_sending_email);
+        this.sendingMessageError = context.getString(R.string.msg_error_sending_email);
     }
 
     private BackgroundMail(Builder builder) {
@@ -64,6 +65,7 @@ public class BackgroundMail {
         attachments = builder.attachments;
         username = builder.username;
         password = builder.password;
+        senderName = builder.senderName;
         mailto = builder.mailto;
         subject = builder.subject;
         body = builder.body;
@@ -221,7 +223,7 @@ public class BackgroundMail {
         this.attachments.addAll(attachments);
     }
 
-    public void addAttachments(String...attachments) {
+    public void addAttachments(String... attachments) {
         this.attachments.addAll(Arrays.asList(attachments));
     }
 
@@ -287,7 +289,7 @@ public class BackgroundMail {
                         }
                     }
                 }
-                sender.sendMail(subject, body, username, mailto, type);
+                sender.sendMail(subject, body, username, senderName, mailto, type);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -307,7 +309,7 @@ public class BackgroundMail {
                     if (onSuccessCallback != null) {
                         onSuccessCallback.onSuccess();
                     }
-                }else {
+                } else {
                     if (!TextUtils.isEmpty(sendingMessageError)) {
                         Toast.makeText(mContext, sendingMessageError, Toast.LENGTH_SHORT).show();
                     }
@@ -325,6 +327,7 @@ public class BackgroundMail {
         private String password;
         private String mailto;
         private String subject;
+        private String senderName;
         private String body;
         private String type = BackgroundMail.TYPE_PLAIN;
         private ArrayList<String> attachments = new ArrayList<>();
@@ -339,7 +342,7 @@ public class BackgroundMail {
             this.context = context;
             this.sendingMessage = context.getString(R.string.msg_sending_email);
             this.sendingMessageSuccess = context.getString(R.string.msg_email_sent_successfully);
-            this.sendingMessageError=context.getString(R.string.msg_error_sending_email);
+            this.sendingMessageError = context.getString(R.string.msg_error_sending_email);
         }
 
         public Builder withUsername(@NonNull String username) {
@@ -354,6 +357,11 @@ public class BackgroundMail {
 
         public Builder withPassword(@NonNull String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder withSenderName(@NonNull String senderName) {
+            this.senderName = senderName;
             return this;
         }
 
@@ -408,7 +416,7 @@ public class BackgroundMail {
             return this;
         }
 
-        public Builder withAttachments(String...attachments) {
+        public Builder withAttachments(String... attachments) {
             this.attachments.addAll(Arrays.asList(attachments));
             return this;
         }
